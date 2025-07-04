@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mesaj Gönder</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffe6f0, #ffccf9);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 450px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    h2 {
+      text-align: center;
+      color: #d5006d;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      color: #555;
+    }
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      background-color: #ff4081;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #e91e63;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: #888;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      color: #d5006d;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>💬 paşanaa Mesaj Gönder</h2>
+    <form action="https://formspree.io/f/mpwrnkjj" method="POST">
+      <label for="name">Adınız</label>
+      <input type="text" name="name" required />
+
+      <label for="message">Mesajınız</label>
+      <textarea name="message" rows="5" required></textarea>
+
+      <button type="submit">Gönder</button>
+    </form>
+    <a class="back-link" href="index.html">← Ana Sayfaya Dön</a>
+  </div>
+</body>
+</html>
