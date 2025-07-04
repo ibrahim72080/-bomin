@@ -16,7 +16,6 @@
       overflow: hidden;
       position: relative;
     }
-
     body::before {
       content: "💖 🌸 💕 🌷 💗 🌹 💞";
       position: absolute;
@@ -29,22 +28,18 @@
       opacity: 0.3;
       pointer-events: none;
     }
-
     @keyframes float {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-
     #question {
       text-align: center;
       z-index: 1;
     }
-
     #question h1 {
       font-size: 24px;
       color: #333;
     }
-
     button {
       padding: 10px 20px;
       font-size: 18px;
@@ -54,76 +49,63 @@
       border-radius: 10px;
       transition: transform 0.2s;
     }
-
     button:hover {
       transform: scale(1.1);
     }
-
     #evet {
       background-color: #ff69b4;
       color: white;
     }
-
     #hayir {
       background-color: #f44336;
       color: white;
     }
-
     #surprise {
       display: none;
       text-align: center;
       position: relative;
       z-index: 1;
     }
-
     .minommm {
       font-size: 32px;
       color: #e91e63;
       margin-bottom: 20px;
     }
-
     .minommm .heart {
       margin: 0 8px;
     }
-
     #surprise h1 {
       font-size: 28px;
       color: #d5006d;
     }
-
     .hearts {
       font-size: 30px;
       margin: 20px;
     }
-
     .hug {
       font-size: 50px;
       margin: 20px;
     }
-
     .animals {
       position: relative;
       height: 100px;
     }
-
     .frog {
       position: absolute;
       bottom: 0;
       animation: jump 2s infinite;
     }
-
     .panda {
       display: inline-block;
       margin: 0 20px;
     }
-
     @keyframes jump {
       0% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
       100% { transform: translateY(0); }
     }
 
-    /* Yeni Buton Stili */
+    /* Yeni Buton */
     #openMessageBtn {
       display: inline-block;
       padding: 12px 24px;
@@ -136,7 +118,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transition: transform 0.3s ease, background-color 0.3s ease;
     }
-
     #openMessageBtn:hover {
       background-color: #ff66a3;
       transform: scale(1.05);
@@ -145,8 +126,8 @@
 </head>
 <body>
 
-  <!-- Yeni Buton (Form başka sayfada açılır) -->
-  <a href="mesaj.html" id="openMessageBtn">💌   olur da bir gün yazmak isteyip de çekinirsen burdan dilediğini yazabilirsin</a>
+  <!-- Buton -->
+  <a href="mesaj.html" id="openMessageBtn">💌 olur da bir gün yazmak isteyip de çekinirsen burdan dilediğini yazabilirsin</a>
 
   <!-- Ziyaret bildirimi -->
   <script>
@@ -190,8 +171,8 @@
     </div>
   </div>
 
-  <!-- Müzik -->
-  <audio id="music" src="path/to/song.mp3"></audio>
+  <!-- Müzik (isteğe bağlı eklenebilir) -->
+  <audio id="music" src="music.mp3"></audio>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script>
