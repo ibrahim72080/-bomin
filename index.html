@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sürpriz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #ffe6f0, #fff0f5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    body::before {
+      content: "💖 🌸 💕 🌷 💗 🌹 💞";
+      position: absolute;
+      top: -10%;
+      left: 0;
+      width: 100%;
+      font-size: 2rem;
+      animation: float 20s linear infinite;
+      white-space: nowrap;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    @keyframes float {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+    #question {
+      text-align: center;
+      z-index: 1;
+    }
+    #question h1 {
+      font-size: 24px;
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    #evet {
+      background-color: #ff69b4;
+      color: white;
+    }
+    #hayir {
+      background-color: #f44336;
+      color: white;
+    }
+    #surprise {
+      display: none;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .minommm {
+      font-size: 32px;
+      color: #e91e63;
+      margin-bottom: 20px;
+    }
+    .minommm .heart {
+      margin: 0 8px;
+    }
+    #surprise h1 {
+      font-size: 28px;
+      color: #d5006d;
+    }
+    .hearts {
+      font-size: 30px;
+      margin: 20px;
+    }
+    .hug {
+      font-size: 50px;
+      margin: 20px;
+    }
+    .animals {
+      position: relative;
+      height: 100px;
+    }
+    .frog {
+      position: absolute;
+      bottom: 0;
+      animation: jump 2s infinite;
+    }
+    .panda {
+      display: inline-block;
+      margin: 0 20px;
+    }
+    @keyframes jump {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Yeni Buton */
+    #openMessageBtn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #ff4081;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    #openMessageBtn:hover {
+      background-color: #ff66a3;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mesaj yazısı ve buton ayrı ayrı -->
+  <div style="position: absolute; top: 20px; text-align: center;">
+    <p style="font-size: 18px; color: #d5006d; margin-bottom: 10px;">
+       olur da bir gün yazmak isteyip de çekinirsen burdan dilediğini yazabilirsin
+    </p>
+    <a href="mesaj.html" id="openMessageBtn">butona bas güzelim 💌</a>
+  </div>
+
+  <!-- Ziyaret bildirimi -->
+  <script>
+    fetch("https://formspree.io/f/mldnkrdj", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: "Ziyaret edildi: " + new Date().toLocaleString()
+      })
+    });
+  </script>
+
+  <!-- Sürpriz içeriği -->
+  <div id="question">
+    <h1>Sürprizi görmek ister misin fıstığımm?</h1>
+    <button id="evet">Evet</button>
+    <button id="hayir">Hayır</button>
+  </div>
+
+  <div id="surprise">
+    <div class="minommm">
+      <span class="heart">💖</span>
+      bitanecik minommm
+      <span class="heart">💖</span>
+    </div>
+
+    <h1>seni herşeyden çokkkkk seviyorummmm gülüşüne aşık olduğummmm</h1>
+    <div class="hearts">❤️ ❤️ ❤️</div>
+    <div class="hug">🐸🤗🐼</div>
+
+    <div class="animals">
+      <span class="frog" style="left: 10%;">🐸</span>
+      <span class="panda">🐼🎋</span>
+      <span class="frog" style="left: 30%;">🐸</span>
+      <span class="panda">🐼🎋</span>
+      <span class="frog" style="left: 50%;">🐸</span>
+      <span class="panda">🐼🎋</span>
+    </div>
+  </div>
+
+  <!-- Müzik -->
+  <audio id="music" src="music.mp3"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const evetButton = document.getElementById('evet');
+      const hayirButton = document.getElementById('hayir');
+      const questionDiv = document.getElementById('question');
+      const surpriseDiv = document.getElementById('surprise');
+      const music = document.getElementById('music');
+      let hayirCount = 0;
+
+      evetButton.addEventListener('click', function() {
+        questionDiv.style.display = 'none';
+        surpriseDiv.style.display = 'block';
+        music.play();
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      });
+
+      hayirButton.addEventListener('click', function() {
+        hayirCount++;
+        if (hayirCount === 1) {
+          hayirButton.textContent = 'Emin misin? Bence görmelisin';
+        } else if (hayirCount === 2) {
+          hayirButton.textContent = 'Sürprizim sana kurban olduğumm';
+        } else {
+          let currentSize = parseInt(window.getComputedStyle(evetButton).fontSize);
+          evetButton.style.fontSize = (currentSize + 10) + 'px';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
