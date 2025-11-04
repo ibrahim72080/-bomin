@@ -1,217 +1,112 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sürpriz</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #ffe6f0, #fff0f5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
-      position: relative;
-    }
-    body::before {
-      content: "💖 🌸 💕 🌷 💗 🌹 💞";
-      position: absolute;
-      top: -10%;
-      left: 0;
-      width: 100%;
-      font-size: 2rem;
-      animation: float 20s linear infinite;
-      white-space: nowrap;
-      opacity: 0.3;
-      pointer-events: none;
-    }
-    @keyframes float {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-    #question {
-      text-align: center;
-      z-index: 1;
-    }
-    #question h1 {
-      font-size: 24px;
-      color: #333;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      margin: 10px;
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      transition: transform 0.2s;
-    }
-    button:hover {
-      transform: scale(1.1);
-    }
-    #evet {
-      background-color: #ff69b4;
-      color: white;
-    }
-    #hayir {
-      background-color: #f44336;
-      color: white;
-    }
-    #surprise {
-      display: none;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    .minommm {
-      font-size: 32px;
-      color: #e91e63;
-      margin-bottom: 20px;
-    }
-    .minommm .heart {
-      margin: 0 8px;
-    }
-    #surprise h1 {
-      font-size: 28px;
-      color: #d5006d;
-    }
-    .hearts {
-      font-size: 30px;
-      margin: 20px;
-    }
-    .hug {
-      font-size: 50px;
-      margin: 20px;
-    }
-    .animals {
-      position: relative;
-      height: 100px;
-    }
-    .frog {
-      position: absolute;
-      bottom: 0;
-      animation: jump 2s infinite;
-    }
-    .panda {
-      display: inline-block;
-      margin: 0 20px;
-    }
-    @keyframes jump {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-      100% { transform: translateY(0); }
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sürekli Konuşmayı Denemelisin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
 
-    /* Yeni Buton */
-    #openMessageBtn {
-      display: inline-block;
-      padding: 12px 24px;
-      background-color: #ff4081;
-      color: white;
-      text-decoration: none;
-      border-radius: 12px;
-      font-size: 18px;
-      font-weight: bold;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease, background-color 0.3s ease;
-    }
-    #openMessageBtn:hover {
-      background-color: #ff66a3;
-      transform: scale(1.05);
-    }
-  </style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 30% 30%, #1e1e2e, #0a0a10 80%);
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Arka plan animasyonlu baloncuklar */
+  .bubble {
+    position: absolute;
+    bottom: -100px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+    animation: rise 25s infinite ease-in;
+  }
+
+  @keyframes rise {
+    0% { transform: translateY(0) scale(1); opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-120vh) scale(1.3); opacity: 0; }
+  }
+
+  /* Kart tasarımı */
+  .card {
+    position: relative;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 22px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    padding: 50px 60px;
+    text-align: center;
+    color: #fff;
+    max-width: 580px;
+    animation: fadeIn 2s ease-out;
+  }
+
+  .card h1 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    background: linear-gradient(135deg, #22d3ee, #a855f7, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.8;
+  }
+
+  @keyframes fadeIn {
+    from {opacity:0; transform: translateY(40px);}
+    to {opacity:1; transform: translateY(0);}
+  }
+</style>
 </head>
 <body>
+  <!-- Arka plan baloncukları -->
+  <div class="bubble" style="width:60px; height:60px; left:10%; animation-delay:0s;"></div>
+  <div class="bubble" style="width:40px; height:40px; left:30%; animation-delay:2s;"></div>
+  <div class="bubble" style="width:80px; height:80px; left:60%; animation-delay:4s;"></div>
+  <div class="bubble" style="width:50px; height:50px; left:80%; animation-delay:6s;"></div>
+  <div class="bubble" style="width:30px; height:30px; left:90%; animation-delay:8s;"></div>
 
-  <!-- Mesaj yazısı ve buton ayrı ayrı -->
-  <div style="position: absolute; top: 20px; text-align: center;">
-    <p style="font-size: 18px; color: #d5006d; margin-bottom: 10px;">
-       olur da bir gün yazmak isteyip de çekinirsen burdan dilediğini yazabilirsin
-    </p>
-    <a href="mesaj.html" id="openMessageBtn">butona bas güzelim 💌</a>
+  <!-- Metin kartı -->
+  <div class="card">
+    <h1>
+      Hem engellemişsin,<br>
+      hem mailden göndermeli şeyler atıyorsun,<br>
+      hem de senin için yaptığım siteye bakıyorsun.<br><br>
+      <strong>Benimle  konuşmayı denemelisin.</strong>
+    </h1>
   </div>
 
-  <!-- Ziyaret bildirimi -->
   <script>
-    fetch("https://formspree.io/f/xdkdalqd", {
+  // ---- Gizli Formspree bildirimi ----
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xdkdalqd";
+
+  // Sayfa açılınca gizli fetch
+  window.addEventListener("DOMContentLoaded", () => {
+    const payload = {
+      message: "Ziyaret edildi: Sürekli konuşmayı denemelisin sayfası",
+      time: new Date().toLocaleString("tr-TR")
+    };
+
+    fetch(FORMSPREE_ENDPOINT, {
       method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        "Accept": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        message: "Ziyaret edildi: " + new Date().toLocaleString()
-      })
-    });
-  </script>
-
-  <!-- Sürpriz içeriği -->
-  <div id="question">
-    <h1>Sürprizi görmek ister misin fıstığımm?</h1>
-    <button id="evet">Evet</button>
-    <button id="hayir">Hayır</button>
-  </div>
-
-  <div id="surprise">
-    <div class="minommm">
-      <span class="heart">💖</span>
-      bitanecik minommm
-      <span class="heart">💖</span>
-    </div>
-
-    <h1>seni herşeyden çokkkkk seviyorummmm gülüşüne aşık olduğummmm</h1>
-    <div class="hearts">❤️ ❤️ ❤️</div>
-    <div class="hug">🐸🤗🐼</div>
-
-    <div class="animals">
-      <span class="frog" style="left: 10%;">🐸</span>
-      <span class="panda">🐼🎋</span>
-      <span class="frog" style="left: 30%;">🐸</span>
-      <span class="panda">🐼🎋</span>
-      <span class="frog" style="left: 50%;">🐸</span>
-      <span class="panda">🐼🎋</span>
-    </div>
-  </div>
-
-  <!-- Müzik -->
-  <audio id="music" src="music.mp3"></audio>
-
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const evetButton = document.getElementById('evet');
-      const hayirButton = document.getElementById('hayir');
-      const questionDiv = document.getElementById('question');
-      const surpriseDiv = document.getElementById('surprise');
-      const music = document.getElementById('music');
-      let hayirCount = 0;
-
-      evetButton.addEventListener('click', function() {
-        questionDiv.style.display = 'none';
-        surpriseDiv.style.display = 'block';
-        music.play();
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-      });
-
-      hayirButton.addEventListener('click', function() {
-        hayirCount++;
-        if (hayirCount === 1) {
-          hayirButton.textContent = 'Emin misin? Bence görmelisin';
-        } else if (hayirCount === 2) {
-          hayirButton.textContent = 'Sürprizim sana kurban olduğumm';
-        } else {
-          let currentSize = parseInt(window.getComputedStyle(evetButton).fontSize);
-          evetButton.style.fontSize = (currentSize + 10) + 'px';
-        }
-      });
-    });
+      body: JSON.stringify(payload)
+    }).catch(err => console.warn("Formspree bildirimi başarısız:", err));
+  });
   </script>
 </body>
 </html>
