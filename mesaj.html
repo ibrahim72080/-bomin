@@ -32,6 +32,7 @@
       display: block;
       margin: 10px 0 5px;
       color: #555;
+      font-weight: 500;
     }
     input,
     textarea {
@@ -42,6 +43,12 @@
       margin-bottom: 15px;
       font-size: 16px;
       box-sizing: border-box;
+    }
+    input:focus,
+    textarea:focus {
+      border-color: #ff66a3;
+      outline: none;
+      box-shadow: 0 0 5px rgba(255, 102, 163, 0.4);
     }
     button {
       width: 100%;
@@ -77,12 +84,33 @@
     .back-link:hover {
       color: #d5006d;
     }
+    .hidden {
+      display: none;
+    }
+    .password-note {
+      font-size: 13px;
+      color: #999;
+      margin-top: -10px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .fade {
+      animation: fadeIn 0.6s ease forwards;
+    }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h2>💬 Paşanaa Mesaj Gönder</h2>
-    <form action="https://formspree.io/f/xdkdalqd" method="POST">
+    
+    <label for="password">Şifreyi Gir</label>
+    <input type="password" id="passwordInput" placeholder="Şifreyi buraya yaz..." />
+    <div class="password-note">Doğru şifreyi girince mesaj bölümü açılır 🔒</div>
+    <button type="button" id="checkPassword">Devam Et</button>
+
+    <form id="messageForm" class="hidden" action="https://formspree.io/f/xdkdalqd" method="POST">
+      <input type="hidden" name="password" id="passwordHidden" />
+      
       <label for="name">Adınız</label>
       <input type="text" name="name" required />
 
@@ -91,7 +119,30 @@
 
       <button type="submit">Gönder</button>
     </form>
-    <a class="back-link" href= https://ibrahim72080.github.io/-bomin/ >← Ana Sayfaya Dön</a>
+
+    <a class="back-link" href="https://ibrahim72080.github.io/-bomin/">← Ana Sayfaya Dön</a>
   </div>
+
+  <script>
+    const correctPassword = "minom"; // 🔒 Burayı istediğin şifreyle değiştir
+    const passwordInput = document.getElementById("passwordInput");
+    const checkPasswordBtn = document.getElementById("checkPassword");
+    const messageForm = document.getElementById("messageForm");
+    const passwordHidden = document.getElementById("passwordHidden");
+
+    checkPasswordBtn.addEventListener("click", () => {
+      if (passwordInput.value === correctPassword) {
+        messageForm.classList.remove("hidden");
+        messageForm.classList.add("fade");
+        passwordHidden.value = passwordInput.value;
+        checkPasswordBtn.disabled = true;
+        passwordInput.disabled = true;
+        checkPasswordBtn.textContent = "✔ Şifre Doğru";
+      } else {
+        alert("Yanlış şifre! Tekrar deneyin 😅");
+      }
+    });
+  </script>
 </body>
-</html>
+  </html>
+  
