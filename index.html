@@ -3,300 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurbağa'dan Panda'ya Mesaj</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <title>kurbağa hattı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-green: #4ade80;
-            --deep-green: #166534;
-            --pond-blue: #bae6fd;
-            --panda-black: #1f2937;
-            --bg-gradient: linear-gradient(135deg, #dcfce7, #dbeafe);
+            --bg-dark: #022c22;
+            --bg-light: #064e3b;
+            --frog-green: #4ade80;
+            --modal-bg: rgba(6, 78, 59, 0.95);
         }
 
         body {
             margin: 0;
-            padding: 0;
-            min-height: 100vh;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 100%, var(--bg-light), var(--bg-dark));
             font-family: 'Nunito', sans-serif;
-            background: var(--bg-gradient);
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
-            position: relative;
-        }
-
-        /* Arka Plan Süsleri */
-        .bg-shape {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(40px);
-            z-index: 0;
-            opacity: 0.5;
-            animation: floatShape 10s infinite alternate ease-in-out;
-        }
-        .shape1 { width: 300px; height: 300px; background: var(--primary-green); top: -50px; left: -50px; }
-        .shape2 { width: 250px; height: 250px; background: var(--pond-blue); bottom: -50px; right: -50px; animation-delay: -5s; }
-
-        @keyframes floatShape { from { transform: translate(0,0); } to { transform: translate(30px, 50px); } }
-
-        /* --- ANA SAHNE KUTUSU --- */
-        .stage-container {
-            position: relative;
-            width: 90%;
-            max-width: 500px;
-            min-height: 500px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-            overflow: hidden;
-            padding: 40px;
-            box-sizing: border-box;
-            transition: all 0.5s ease;
-        }
-
-        /* FORM ALANI (Başlangıçta görünür) */
-        .form-view {
-            opacity: 1;
-            transform: translateY(0);
-            transition: all 0.5s ease;
-        }
-        .form-view.hidden {
-            opacity: 0;
-            transform: translateY(-50px);
-            pointer-events: none;
-        }
-
-        h2 {
-            text-align: center;
-            color: var(--deep-green);
-            margin-bottom: 30px;
-            font-weight: 800;
-        }
-
-        .input-group { margin-bottom: 20px; }
-        input, textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 15px;
-            font-family: 'Nunito', sans-serif;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.8);
-            transition: 0.3s;
-            box-sizing: border-box;
-        }
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-green);
-            box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2);
-        }
-        textarea { height: 120px; resize: none; }
-
-        .btn-send {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 15px;
-            background: var(--primary-green);
-            color: var(--deep-green);
-            font-weight: 800;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.3s;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            color: white;
+            user-select: none;
         }
-        .btn-send:hover { background: #22c55e; transform: translateY(-2px); }
 
-        /* --- ANİMASYON SAHNESİ (Gönderilince çıkar) --- */
-        .delivery-scene {
+        /* --- SİS & ATEŞ BÖCEĞİ ATMOSFERİ --- */
+        .fog {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/img/fog1.png') repeat-x;
+            background-size: 200% auto;
+            opacity: 0.15;
+            animation: fogMove 60s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        @keyframes fogMove { 0% { background-position: 0 0; } 100% { background-position: -200% 0; } }
+
+        /* --- SAHNE --- */
+        .stage {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .instruction {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.3rem;
+            color: var(--frog-green);
+            margin-bottom: 20px;
+            animation: floatText 3s infinite ease-in-out;
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+        }
+        @keyframes floatText { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* --- KURBAĞA BUTONU --- */
+        .frog-btn {
+            cursor: pointer;
+            transition: transform 0.3s;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+        }
+        .frog-btn:hover { transform: scale(1.05); }
+        .frog-btn:active { transform: scale(0.95); }
+        
+        /* Form açılınca kurbağa kaybolsun/küçülsün */
+        .frog-btn.hidden { opacity: 0; pointer-events: none; transform: scale(0); }
+
+        .frog-svg { width: 160px; height: auto; }
+
+        /* --- MODAL FORM --- */
+        .modal-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-wrapper.active { opacity: 1; pointer-events: auto; }
+
+        .glass-panel {
+            background: var(--modal-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--frog-green);
+            padding: 30px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: translateY(50px);
+            transition: transform 0.4s;
+            box-shadow: 0 0 40px rgba(74, 222, 128, 0.1);
+        }
+        .modal-wrapper.active .glass-panel { transform: translateY(0); }
+
+        .close {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        h3 { color: var(--frog-green); margin-top: 0; font-family: 'Fredoka', sans-serif; text-align: center; }
+
+        /* FORM GİRDİLERİ */
+        .input-group { margin-bottom: 15px; }
+        
+        input, textarea {
+            width: 100%;
+            box-sizing: border-box; /* ÖNEMLİ: Taşamayı engeller */
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #444;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--frog-green); background: rgba(0,0,0,0.5); }
+        textarea { height: 120px; resize: none; }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--frog-green);
+            color: #064e3b;
+            font-weight: 800;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+        button:hover { background: #86efac; }
+        button:disabled { opacity: 0.6; cursor: wait; }
+
+        /* --- ANİMASYON SAHNESİ --- */
+        .delivery-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark);
+            z-index: 100;
+            display: none; /* JS ile açılacak */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .delivery-overlay.playing { display: flex; }
+
+        .scene-actors {
+            position: relative;
+            width: 80%;
+            height: 200px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease 0.3s; /* 0.3s gecikmeli başlasın */
-        }
-        .delivery-scene.active {
-            opacity: 1;
         }
 
-        .character {
-            width: 100px;
-            height: auto;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2));
-        }
-        .frog-actor { transform: scale(0); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .panda-actor { transform: scale(0); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s; }
-
-        .delivery-scene.active .frog-actor,
-        .delivery-scene.active .panda-actor {
-            transform: scale(1);
-        }
-
-        /* Uçan Mesaj İkonu */
-        .traveling-message {
+        .actor { width: 90px; height: auto; }
+        
+        /* Uçan Mesaj Stili */
+        .flying-msg {
             position: absolute;
-            left: 100px; /* Kurbağanın konumu */
-            font-size: 2rem;
+            left: 50px; top: 80px;
+            width: 25px; height: 15px;
             background: white;
-            padding: 10px;
-            border-radius: 50%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            box-shadow: 0 0 10px white;
             opacity: 0;
-            z-index: 20;
+            z-index: 101;
+        }
+        .flying-msg::before { /* Mektup çizgileri */
+            content: ''; position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 15px; height: 1px; background: #ccc;
         }
 
-        /* Mesajın Yolculuk Animasyonu */
-        .sending .traveling-message {
-            animation: deliverMessage 2s forwards cubic-bezier(0.45, 0, 0.55, 1);
+        /* Uçuş Animasyonu */
+        .fly-active { animation: sendToPanda 2s forwards ease-in-out; }
+
+        @keyframes sendToPanda {
+            0% { opacity: 1; left: 50px; top: 80px; transform: scale(0.5) rotate(0deg); }
+            50% { top: -50px; transform: scale(1.2) rotate(180deg); } /* Kavisin tepesi */
+            100% { opacity: 1; left: calc(100% - 90px); top: 80px; transform: scale(0.5) rotate(360deg); }
         }
 
-        @keyframes deliverMessage {
-            0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
-            20% { opacity: 1; transform: translate(0, 0) scale(1); }
-            80% { opacity: 1; transform: translate(200px, -20px) rotate(360deg) scale(1); } /* Pandaya gidiş */
-            100% { opacity: 0; transform: translate(200px, 10px) scale(0.5); } /* Pandada kayboluş */
-        }
-
-        /* Başarı Mesajı */
-        .success-box {
-            position: absolute;
-            bottom: 30px; left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--deep-green);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
+        .success-label {
+            margin-top: 40px;
+            color: var(--frog-green);
+            font-size: 1.5rem;
+            font-family: 'Fredoka', sans-serif;
             opacity: 0;
-            transition: all 0.5s ease;
+            transition: 0.5s;
         }
-        .success-box.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
+        .success-label.visible { opacity: 1; transform: translateY(-10px); }
 
     </style>
 </head>
 <body>
 
-    <div class="bg-shape shape1"></div>
-    <div class="bg-shape shape2"></div>
+    <div class="fog"></div>
 
-    <div class="stage-container" id="mainStage">
+    <div class="stage">
+        <div class="instruction" id="instruction">🐸 Mesaj için Kurbağaya Dokun</div>
         
-        <div class="form-view" id="formView">
-            <h2>Kurbağa Postası 🐸</h2>
-            <form id="contactForm" action="https://formspree.io/f/xdkdalqd" method="POST">
+        <div class="frog-btn" id="frogTrigger">
+            <svg class="frog-svg" viewBox="0 0 100 100">
+                <ellipse cx="50" cy="85" rx="50" ry="15" fill="#14532d"/>
+                <circle cx="50" cy="60" r="30" fill="#4ade80" stroke="#064e3b" stroke-width="2"/>
+                <g fill="white">
+                    <circle cx="35" cy="45" r="8"/> <circle cx="65" cy="45" r="8"/>
+                </g>
+                <g fill="black">
+                    <circle cx="35" cy="45" r="3"/> <circle cx="65" cy="45" r="3"/>
+                </g>
+                <path d="M 40 70 Q 50 80 60 70" stroke="#064e3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="modal-wrapper" id="modalWrapper">
+        <div class="glass-panel">
+            <span class="close" id="closeModal">&times;</span>
+            <h3>Posta Gönder</h3>
+            
+            <form id="swampForm" action="https://formspree.io/f/xandnvvv" method="POST">
+                
                 <div class="input-group">
-                    <input type="text" name="name" placeholder="Adınız" required autocomplete="off">
+                    <input type="text" name="name" placeholder="Kimden?" required autocomplete="off">
                 </div>
+
                 <div class="input-group">
-                    <textarea name="message" placeholder="Panda'ya iletilecek mesaj..." required></textarea>
+                    <textarea name="message" placeholder="Panda'ya ne söylemek istersin?" required></textarea>
                 </div>
-                <button type="submit" class="btn-send" id="submitBtn">
-                    Gönder Gitsin! 🚀
-                </button>
+
+                <button type="submit" id="submitBtn">Vırak (Gönder)</button>
             </form>
+            </div>
+    </div>
+
+    <div class="delivery-overlay" id="animScene">
+        <div class="scene-actors">
+            <svg class="actor" viewBox="0 0 100 100">
+                <circle cx="50" cy="60" r="30" fill="#4ade80"/>
+                <circle cx="35" cy="45" r="5" fill="black"/> <circle cx="65" cy="45" r="5" fill="black"/>
+                <ellipse cx="50" cy="70" rx="10" ry="15" fill="#064e3b"/> </svg>
+
+            <div class="flying-msg" id="flyMsg"></div>
+
+            <svg class="actor" id="pandaTarget" viewBox="0 0 100 100" style="transition:0.3s">
+                <circle cx="50" cy="60" r="35" fill="white"/>
+                <circle cx="25" cy="35" r="12" fill="#111"/> <circle cx="75" cy="35" r="12" fill="#111"/>
+                <circle cx="38" cy="55" r="4" fill="#111"/> <circle cx="62" cy="55" r="4" fill="#111"/>
+                <path d="M 45 70 Q 50 75 55 70" stroke="#111" stroke-width="2" fill="none"/>
+            </svg>
         </div>
-
-        <div class="delivery-scene" id="deliveryScene">
-            <svg class="character frog-actor" viewBox="0 0 100 100">
-                <circle cx="50" cy="60" r="30" fill="#4ade80"/> <circle cx="35" cy="40" r="10" fill="#4ade80"/> <circle cx="65" cy="40" r="10" fill="#4ade80"/> <circle cx="35" cy="40" r="5" fill="white"/> <circle cx="65" cy="40" r="5" fill="white"/>
-                <circle cx="35" cy="40" r="2" fill="black"/> <circle cx="65" cy="40" r="2" fill="black"/>
-                <path d="M 40 70 Q 50 80 60 70" stroke="#166534" stroke-width="3" fill="none"/> </svg>
-
-            <div class="traveling-message" id="mailIcon">💌</div>
-
-            <svg class="character panda-actor" viewBox="0 0 100 100">
-                 <circle cx="50" cy="60" r="35" fill="white" stroke="#1f2937" stroke-width="3"/> <circle cx="30" cy="35" r="12" fill="#1f2937"/> <circle cx="70" cy="35" r="12" fill="#1f2937"/> <ellipse cx="38" cy="55" rx="10" ry="8" fill="#1f2937" transform="rotate(-20)"/> <ellipse cx="62" cy="55" rx="10" ry="8" fill="#1f2937" transform="rotate(20)"/> <circle cx="38" cy="55" r="3" fill="white"/> <circle cx="62" cy="55" r="3" fill="white"/> <ellipse cx="50" cy="68" rx="5" ry="3" fill="#1f2937"/> <path d="M 65 80 L 75 95 L 85 70" fill="none" stroke="#166534" stroke-width="4" stroke-linecap="round"/> </svg>
-        </div>
-        
-        <div class="success-box" id="successBox">Teslimat Başarılı! Vırak!</div>
+        <div class="success-label" id="successTxt">Mesaj İletildi! 🐼</div>
     </div>
 
     <script>
-        // Sayfa açılış bildirimi (Formspree)
-        fetch("https://formspree.io/f/xdkdalqd", {
+        // --- 1. ZİYARET BİLDİRİMİ ---
+        // Sayfa yüklenince arka planda sessizce bildirim gönderir.
+        // Hata verse bile kullanıcıya yansıtmaz.
+        fetch("https://formspree.io/f/xandnvvv", {
             method: "POST",
-            headers: { "Accept": "application/json" },
-            body: JSON.stringify({ status: "Kurbağa-Panda Sayfası Açıldı", date: new Date() })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                _subject: "Biri Sayfaya Girdi (Ziyaret)",
+                info: "Sayfa şu an görüntülendi."
+            })
+        }).catch(() => {}); // Hata olursa yoksay
+
+
+        // --- 2. ETKİLEŞİMLER ---
+        const frogTrigger = document.getElementById('frogTrigger');
+        const modalWrapper = document.getElementById('modalWrapper');
+        const closeModal = document.getElementById('closeModal');
+        const instruction = document.getElementById('instruction');
+
+        // Formu aç
+        frogTrigger.addEventListener('click', () => {
+            modalWrapper.classList.add('active');
+            frogTrigger.classList.add('hidden');
+            instruction.style.opacity = '0';
         });
 
-        const form = document.getElementById("contactForm");
-        const formView = document.getElementById("formView");
-        const deliveryScene = document.getElementById("deliveryScene");
-        const successBox = document.getElementById("successBox");
-        const submitBtn = document.getElementById("submitBtn");
+        // Formu kapat (X tuşu)
+        closeModal.addEventListener('click', () => {
+            modalWrapper.classList.remove('active');
+            frogTrigger.classList.remove('hidden');
+            instruction.style.opacity = '1';
+        });
 
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
+        // --- 3. FORM GÖNDERİMİ (GÜVENLİ YÖNTEM) ---
+        const form = document.getElementById('swampForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const animScene = document.getElementById('animScene');
+        const flyMsg = document.getElementById('flyMsg');
+        const successTxt = document.getElementById('successTxt');
+        const pandaTarget = document.getElementById('pandaTarget');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Sayfa yenilenmesini engelle
             
-            // 1. Butonu kilitle ve yazısını değiştir
             submitBtn.disabled = true;
-            submitBtn.innerHTML = "İletiliyor...";
+            submitBtn.innerText = "İletiliyor...";
 
-            // 2. Sahne Değişimi Başlat: Formu gizle, sahneyi göster
-            formView.classList.add("hidden");
-            deliveryScene.classList.add("active");
-
-            // 3. Mesaj animasyonunu tetikle (Kurbağadan Pandaya)
-            // Biraz bekleyip karakterler belirdikten sonra başlatıyoruz
-            setTimeout(() => {
-                deliveryScene.classList.add("sending");
-            }, 800);
-
-            // 4. Form Verisini Arka Planda Gönder
+            // FormData: Formdaki tüm name='...' alanlarını otomatik paketler.
+            // "message" alanı textarea olduğu için ve name="message" olduğu için kesin gider.
             const data = new FormData(form);
+
             try {
                 const response = await fetch(form.action, {
-                    method: "POST",
+                    method: form.method,
                     body: data,
-                    headers: { "Accept": "application/json" }
+                    headers: {
+                        'Accept': 'application/json'
+                    }
                 });
 
-                // Animasyonun bitmesini bekle (toplam yaklaşık 2.5sn sürüyor)
-                setTimeout(() => {
-                    if (response.ok) {
-                        // 5. Başarılı Sonuç
-                        successBox.classList.add("show");
-                        form.reset(); // Formu temizle
-                    } else {
-                        successBox.innerText = "Bir hata oldu!";
-                        successBox.style.background = "red";
-                        successBox.classList.add("show");
-                    }
-                }, 2500); // Animasyon süresi kadar bekle
+                if (response.ok) {
+                    // --- BAŞARILI ---
+                    // 1. Modalı gizle
+                    modalWrapper.classList.remove('active');
+                    
+                    // 2. Animasyon Sahnesini Aç
+                    animScene.classList.add('playing');
 
-                // 6. Her şeyi sıfırla ve başa dön (4 saniye sonra)
-                setTimeout(() => {
-                    formView.classList.remove("hidden");
-                    deliveryScene.classList.remove("active");
-                    deliveryScene.classList.remove("sending");
-                    successBox.classList.remove("show");
+                    // 3. Mektubu fırlat (0.5sn bekle)
+                    setTimeout(() => {
+                        flyMsg.classList.add('fly-active');
+                    }, 300);
+
+                    // 4. Panda yakalasın (2sn sonra)
+                    setTimeout(() => {
+                        pandaTarget.style.transform = "scale(1.2) rotate(10deg)"; // Panda zıplasın
+                        successTxt.classList.add('visible');
+                    }, 2300);
+
+                    // 5. Her şeyi sıfırla (5sn sonra)
+                    setTimeout(() => {
+                        location.reload(); // Temiz sayfa
+                    }, 5000);
+
+                } else {
+                    alert("Formspree hatası! Lütfen tekrar dene.");
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = "Gönder Gitsin! 🚀";
-                    successBox.innerText = "Teslimat Başarılı! Vırak!"; // Reset text
-                    successBox.style.background = "var(--deep-green)"; // Reset color
-                }, 5000);
-
+                    submitBtn.innerText = "Vırak (Gönder)";
+                }
             } catch (error) {
-                alert("Bağlantı hatası.");
-                location.reload();
+                alert("Bağlantı sorunu var patron.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Vırak (Gönder)";
             }
         });
+
     </script>
 </body>
 </html>
