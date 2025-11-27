@@ -3,271 +3,397 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kurbağa hattı</title>
+    <title>Kurbağa Hattı | Ultimate</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-dark: #022c22;
-            --bg-light: #064e3b;
-            --frog-green: #4ade80;
-            --modal-bg: rgba(6, 78, 59, 0.95);
+            --bg-deep: #0f172a;
+            --bg-swamp: #064e3b;
+            --accent-green: #4ade80;
+            --accent-glow: #86efac;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-color: #ecfdf5;
         }
 
         body {
             margin: 0;
             height: 100vh;
-            background: radial-gradient(circle at 50% 100%, var(--bg-light), var(--bg-dark));
+            background: radial-gradient(circle at 50% 120%, var(--bg-swamp), var(--bg-deep));
             font-family: 'Nunito', sans-serif;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
-            user-select: none;
+            color: var(--text-color);
+            position: relative;
+            cursor: crosshair; /* Sihirli his için imleç */
         }
 
-        /* --- SİS & ATEŞ BÖCEĞİ ATMOSFERİ --- */
+        /* --- SİHİRLİ İMLEÇ İZİ (FAIRY DUST) --- */
+        .fairy-dust {
+            position: absolute;
+            width: 6px; height: 6px;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 10px var(--accent-green), 0 0 20px white;
+            animation: dustFade 1s forwards ease-out;
+            z-index: 9999;
+        }
+        @keyframes dustFade {
+            0% { opacity: 1; transform: scale(1) translateY(0); }
+            100% { opacity: 0; transform: scale(2) translateY(-20px); }
+        }
+
+        /* --- SES KONTROL BUTONU --- */
+        .sound-toggle {
+            position: absolute;
+            top: 20px; right: 20px;
+            z-index: 200;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .sound-toggle:hover { background: var(--accent-green); color: #064e3b; }
+
+        /* --- ATMOSFER & SİS --- */
+        .firefly {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: fly 10s infinite alternate ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+        @keyframes fly {
+            0% { transform: translate(0, 0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(var(--moveX), var(--moveY)); opacity: 0; }
+        }
+
         .fog {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://raw.githubusercontent.com/danielstuart14/CSS_FOG_ANIMATION/master/img/fog1.png') repeat-x;
-            background-size: 200% auto;
-            opacity: 0.15;
-            animation: fogMove 60s linear infinite;
+            bottom: 0; left: 0; width: 100%; height: 40%;
+            background: linear-gradient(to top, rgba(6, 78, 59, 0.8), transparent);
+            filter: blur(20px);
             z-index: 1;
             pointer-events: none;
         }
-        @keyframes fogMove { 0% { background-position: 0 0; } 100% { background-position: -200% 0; } }
 
         /* --- SAHNE --- */
         .stage {
             position: relative;
             z-index: 10;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* YENİ GELİŞMİŞ YAZI ANİMASYONU */
+        .instruction-wrapper {
+            position: relative;
+            margin-bottom: 40px;
+        }
         .instruction {
             font-family: 'Fredoka', sans-serif;
-            font-size: 1.3rem;
-            color: var(--frog-green);
-            margin-bottom: 20px;
-            animation: floatText 3s infinite ease-in-out;
-            text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+            font-size: 1.8rem;
+            color: transparent;
+            background: linear-gradient(90deg, var(--accent-green), #fff, var(--accent-green));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+            animation: shineText 3s linear infinite, floatText 4s ease-in-out infinite;
+            white-space: nowrap;
         }
-        @keyframes floatText { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes shineText { to { background-position: 200% center; } }
+        @keyframes floatText { 
+            0%, 100% { transform: translateY(0) rotate(-1deg); } 
+            50% { transform: translateY(-8px) rotate(1deg); } 
+        }
 
         /* --- KURBAĞA BUTONU --- */
-        .frog-btn {
+        .frog-wrapper {
+            position: relative;
             cursor: pointer;
-            transition: transform 0.3s;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .frog-btn:hover { transform: scale(1.05); }
-        .frog-btn:active { transform: scale(0.95); }
-        
-        /* Form açılınca kurbağa kaybolsun/küçülsün */
-        .frog-btn.hidden { opacity: 0; pointer-events: none; transform: scale(0); }
+        .frog-wrapper:hover { transform: scale(1.1) translateY(-10px); }
+        .frog-wrapper:active { transform: scale(0.95); }
 
-        .frog-svg { width: 160px; height: auto; }
+        .ripple {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-green);
+            opacity: 0;
+            animation: rippleAnim 3s infinite;
+            z-index: -1;
+        }
+        .ripple:nth-child(2) { animation-delay: 1s; }
 
-        /* --- MODAL FORM --- */
-        .modal-wrapper {
+        @keyframes rippleAnim {
+            0% { width: 100px; height: 100px; opacity: 0.6; border-width: 4px; }
+            100% { width: 300px; height: 300px; opacity: 0; border-width: 0px; }
+        }
+
+        .frog-svg { 
+            width: 180px; height: auto; 
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
+        }
+
+        .hidden { opacity: 0; pointer-events: none; transform: scale(0) !important; transition: 0.5s; }
+
+        /* --- GLASS MODAL --- */
+        .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(2, 44, 34, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 50;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 50;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s;
+            transition: opacity 0.4s ease;
         }
-        .modal-wrapper.active { opacity: 1; pointer-events: auto; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-        .glass-panel {
-            background: var(--modal-bg);
-            backdrop-filter: blur(12px);
-            border: 2px solid var(--frog-green);
-            padding: 30px;
-            border-radius: 25px;
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-left: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 30px;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
+            transform: translateY(100px) scale(0.9);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
-            transform: translateY(50px);
-            transition: transform 0.4s;
-            box-shadow: 0 0 40px rgba(74, 222, 128, 0.1);
         }
-        .modal-wrapper.active .glass-panel { transform: translateY(0); }
+        .modal-overlay.active .glass-card { transform: translateY(0) scale(1); }
 
-        .close {
+        .close-btn {
             position: absolute;
-            top: 15px; right: 20px;
-            font-size: 24px;
+            top: 20px; right: 25px;
+            font-size: 28px;
             cursor: pointer;
-            color: #aaa;
+            color: rgba(255,255,255,0.5);
+            transition: 0.3s;
+        }
+        .close-btn:hover { color: white; transform: rotate(90deg); }
+
+        h3 { 
+            color: var(--accent-green); 
+            margin: 0 0 30px 0; 
+            font-family: 'Fredoka', sans-serif; 
+            font-size: 1.8rem;
+            text-align: center;
+            letter-spacing: 1px;
         }
 
-        h3 { color: var(--frog-green); margin-top: 0; font-family: 'Fredoka', sans-serif; text-align: center; }
-
-        /* FORM GİRDİLERİ */
-        .input-group { margin-bottom: 15px; }
+        /* --- INPUTS --- */
+        .input-group { margin-bottom: 25px; position: relative; }
         
         input, textarea {
             width: 100%;
-            box-sizing: border-box; /* ÖNEMLİ: Taşamayı engeller */
-            padding: 15px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid #444;
-            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            border: none;
+            border-radius: 15px;
+            padding: 15px 20px;
             color: white;
             font-family: 'Nunito', sans-serif;
             font-size: 1rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+            border: 1px solid transparent;
         }
-        input:focus, textarea:focus { outline: none; border-color: var(--frog-green); background: rgba(0,0,0,0.5); }
+        input:focus, textarea:focus {
+            outline: none;
+            background: rgba(0,0,0,0.4);
+            border-color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
+        }
         textarea { height: 120px; resize: none; }
 
-        button {
+        button.send-btn {
             width: 100%;
-            padding: 15px;
-            background: var(--frog-green);
+            padding: 18px;
+            background: linear-gradient(135deg, var(--accent-green), #22c55e);
             color: #064e3b;
             font-weight: 800;
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
             cursor: pointer;
             font-size: 1.1rem;
-            transition: 0.2s;
+            box-shadow: 0 10px 20px rgba(74, 222, 128, 0.3);
+            transition: 0.3s;
         }
-        button:hover { background: #86efac; }
-        button:disabled { opacity: 0.6; cursor: wait; }
+        button.send-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 30px rgba(74, 222, 128, 0.5);
+        }
+        button.send-btn:active { transform: translateY(1px); }
+        button.send-btn:disabled { opacity: 0.7; cursor: wait; filter: grayscale(1); }
 
-        /* --- ANİMASYON SAHNESİ --- */
-        .delivery-overlay {
+        /* --- DELIVERY ANIMATION --- */
+        .delivery-scene {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-dark);
+            background: var(--bg-deep);
             z-index: 100;
-            display: none; /* JS ile açılacak */
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-        .delivery-overlay.playing { display: flex; }
+        .delivery-scene.playing { display: flex; }
 
-        .scene-actors {
+        .actors-container {
             position: relative;
-            width: 80%;
+            width: 300px;
             height: 200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .actor { width: 90px; height: auto; }
-        
-        /* Uçan Mesaj Stili */
-        .flying-msg {
+        .actor-svg { position: absolute; width: 80px; height: auto; bottom: 0; }
+        .frog-actor { left: 0; }
+        .panda-actor { right: 0; transform-origin: bottom center; }
+
+        .paper-plane {
             position: absolute;
-            left: 50px; top: 80px;
-            width: 25px; height: 15px;
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px white;
+            left: 40px; bottom: 40px;
+            font-size: 24px;
             opacity: 0;
-            z-index: 101;
-        }
-        .flying-msg::before { /* Mektup çizgileri */
-            content: ''; position: absolute;
-            top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 15px; height: 1px; background: #ccc;
+            z-index: 102;
+            filter: drop-shadow(0 0 10px white);
         }
 
-        /* Uçuş Animasyonu */
-        .fly-active { animation: sendToPanda 2s forwards ease-in-out; }
-
-        @keyframes sendToPanda {
-            0% { opacity: 1; left: 50px; top: 80px; transform: scale(0.5) rotate(0deg); }
-            50% { top: -50px; transform: scale(1.2) rotate(180deg); } /* Kavisin tepesi */
-            100% { opacity: 1; left: calc(100% - 90px); top: 80px; transform: scale(0.5) rotate(360deg); }
+        .fly-animation {
+            animation: throwMessage 2.5s cubic-bezier(0.45, 0, 0.55, 1) forwards;
         }
 
-        .success-label {
-            margin-top: 40px;
-            color: var(--frog-green);
-            font-size: 1.5rem;
+        @keyframes throwMessage {
+            0% { opacity: 1; transform: translate(0, 0) scale(0.5) rotate(0deg); }
+            50% { transform: translate(110px, -150px) scale(1.2) rotate(180deg); } 
+            100% { opacity: 1; transform: translate(220px, 0) scale(0.5) rotate(360deg); }
+        }
+
+        .success-text {
+            margin-top: 50px;
+            font-size: 2rem;
+            color: var(--accent-green);
             font-family: 'Fredoka', sans-serif;
             opacity: 0;
-            transition: 0.5s;
+            transform: translateY(20px);
+            transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .success-label.visible { opacity: 1; transform: translateY(-10px); }
+        .success-text.show { opacity: 1; transform: translateY(0); }
 
     </style>
 </head>
 <body>
 
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/10/26/audio_7a11188090.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="clickSound" preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_598f850431.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="successSound" preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_0758046660.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="sound-toggle" id="soundToggle">
+        <i class="fas fa-volume-mute"></i>
+    </div>
+
+    <div id="fireflies-container"></div>
     <div class="fog"></div>
 
-    <div class="stage">
-        <div class="instruction" id="instruction">🐸 Mesaj için Kurbağaya Dokun</div>
+    <div class="stage" id="mainStage">
+        <div class="instruction-wrapper" id="instruction">
+            <div class="instruction">İleti için dokun bana</div>
+        </div>
         
-        <div class="frog-btn" id="frogTrigger">
-            <svg class="frog-svg" viewBox="0 0 100 100">
-                <ellipse cx="50" cy="85" rx="50" ry="15" fill="#14532d"/>
-                <circle cx="50" cy="60" r="30" fill="#4ade80" stroke="#064e3b" stroke-width="2"/>
-                <g fill="white">
-                    <circle cx="35" cy="45" r="8"/> <circle cx="65" cy="45" r="8"/>
+        <div class="frog-wrapper" id="frogTrigger">
+            <div class="ripple"></div>
+            <div class="ripple"></div>
+            
+            <svg class="frog-svg" viewBox="0 0 100 100" id="frogSvgMain">
+                <defs>
+                    <radialGradient id="gradBody" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#166534;stop-opacity:1" />
+                    </radialGradient>
+                </defs>
+                <ellipse cx="50" cy="85" rx="45" ry="15" fill="#14532d" opacity="0.6"/>
+                <circle cx="50" cy="60" r="30" fill="url(#gradBody)" stroke="#064e3b" stroke-width="2"/>
+                
+                <g class="eyes-base">
+                    <circle cx="35" cy="40" r="10" fill="url(#gradBody)" stroke="#064e3b" stroke-width="1"/>
+                    <circle cx="35" cy="40" r="5" fill="white"/> <circle cx="65" cy="40" r="10" fill="url(#gradBody)" stroke="#064e3b" stroke-width="1"/>
+                    <circle cx="65" cy="40" r="5" fill="white"/> </g>
+
+                <g class="pupils">
+                    <circle class="pupil-left" cx="35" cy="40" r="2.5" fill="black"/>
+                    <circle class="pupil-right" cx="65" cy="40" r="2.5" fill="black"/>
                 </g>
-                <g fill="black">
-                    <circle cx="35" cy="45" r="3"/> <circle cx="65" cy="45" r="3"/>
-                </g>
-                <path d="M 40 70 Q 50 80 60 70" stroke="#064e3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+                <path d="M 40 70 Q 50 78 60 70" stroke="#064e3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="35" cy="65" r="3" fill="#fbcfe8" opacity="0.6"/>
+                <circle cx="65" cy="65" r="3" fill="#fbcfe8" opacity="0.6"/>
             </svg>
         </div>
     </div>
 
-    <div class="modal-wrapper" id="modalWrapper">
-        <div class="glass-panel">
-            <span class="close" id="closeModal">&times;</span>
-            <h3>Posta Gönder</h3>
-            
+    <div class="modal-overlay" id="modalWrapper">
+        <div class="glass-card">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3>📨 Orman Postası</h3>
             <form id="swampForm" action="https://formspree.io/f/xandnvvv" method="POST">
-                
-                <div class="input-group">
-                    <input type="text" name="name" placeholder="Kimden?" required autocomplete="off">
-                </div>
-
-                <div class="input-group">
-                    <textarea name="message" placeholder="Panda'ya ne söylemek istersin?" required></textarea>
-                </div>
-
-                <button type="submit" id="submitBtn">Vırak (Gönder)</button>
+                <div class="input-group"><input type="text" name="name" placeholder="Adın nedir yolcu?" required autocomplete="off"></div>
+                <div class="input-group"><textarea name="message" placeholder="Panda'ya iletmek istediğin not..." required></textarea></div>
+                <button type="submit" class="send-btn" id="submitBtn">Mektubu Mühürle & Gönder</button>
             </form>
-            </div>
+        </div>
     </div>
 
-    <div class="delivery-overlay" id="animScene">
-        <div class="scene-actors">
-            <svg class="actor" viewBox="0 0 100 100">
+    <div class="delivery-scene" id="animScene">
+        <div class="actors-container">
+            <svg class="actor-svg frog-actor" viewBox="0 0 100 100">
                 <circle cx="50" cy="60" r="30" fill="#4ade80"/>
                 <circle cx="35" cy="45" r="5" fill="black"/> <circle cx="65" cy="45" r="5" fill="black"/>
-                <ellipse cx="50" cy="70" rx="10" ry="15" fill="#064e3b"/> </svg>
-
-            <div class="flying-msg" id="flyMsg"></div>
-
-            <svg class="actor" id="pandaTarget" viewBox="0 0 100 100" style="transition:0.3s">
+            </svg>
+            <div class="paper-plane" id="flyMsg">💌</div>
+            <svg class="actor-svg panda-actor" id="pandaTarget" viewBox="0 0 100 100">
                 <circle cx="50" cy="60" r="35" fill="white"/>
                 <circle cx="25" cy="35" r="12" fill="#111"/> <circle cx="75" cy="35" r="12" fill="#111"/>
-                <circle cx="38" cy="55" r="4" fill="#111"/> <circle cx="62" cy="55" r="4" fill="#111"/>
-                <path d="M 45 70 Q 50 75 55 70" stroke="#111" stroke-width="2" fill="none"/>
+                <path d="M 45 70 Q 50 73 55 70" stroke="#111" stroke-width="2" fill="none"/>
             </svg>
         </div>
-        <div class="success-label" id="successTxt">Mesaj İletildi! 🐼</div>
+        <div class="success-text" id="successTxt">Teslim Edildi! 🐼✨</div>
     </div>
 
     <script>
-        // --- 1. ZİYARET BİLDİRİMİ ---
+    // --- 1. ZİYARET BİLDİRİMİ ---
         // Sayfa yüklenince arka planda sessizce bildirim gönderir.
         // Hata verse bile kullanıcıya yansıtmaz.
         fetch("https://formspree.io/f/xandnvvv", {
@@ -278,29 +404,153 @@
                 info: "Sayfa şu an görüntülendi."
             })
         }).catch(() => {}); // Hata olursa yoksay
+        
+    
+    
+    
+        // --- 1. SES & HAPTIC MOTORU ---
+        let isMuted = localStorage.getItem('frogMute') === 'true';
+        const bgMusic = document.getElementById('bgMusic');
+        const clickSound = document.getElementById('clickSound');
+        const successSound = document.getElementById('successSound');
+        const soundToggle = document.getElementById('soundToggle');
+        const soundIcon = soundToggle.querySelector('i');
+
+        bgMusic.volume = 0.3; // Ambiyans sesi kısık başlasın
+
+        function updateSoundIcon() {
+            if (isMuted) {
+                soundIcon.classList.remove('fa-volume-up');
+                soundIcon.classList.add('fa-volume-mute');
+                bgMusic.pause();
+            } else {
+                soundIcon.classList.remove('fa-volume-mute');
+                soundIcon.classList.add('fa-volume-up');
+                // Tarayıcı politikası gereği, müzik sadece kullanıcı etkileşimi sonrası başlayabilir.
+                // İlk tıklamada başlayacak şekilde aşağıda ayarladık.
+            }
+        }
+        updateSoundIcon();
+
+        soundToggle.addEventListener('click', () => {
+            isMuted = !isMuted;
+            localStorage.setItem('frogMute', isMuted);
+            updateSoundIcon();
+            if(!isMuted) bgMusic.play().catch(()=>{}); // Hata verirse (henüz etkileşim yoksa) yoksay
+        });
+
+        function playSound(sound) {
+            if (!isMuted && sound) {
+                sound.currentTime = 0;
+                sound.play().catch(()=>{});
+            }
+        }
+
+        function triggerHaptic() {
+            if (navigator.vibrate) {
+                navigator.vibrate(50); // 50ms hafif titreşim
+            }
+        }
+
+        // --- 2. GÖZ TAKİBİ (EYE TRACKING) ---
+        const pupilLeft = document.querySelector('.pupil-left');
+        const pupilRight = document.querySelector('.pupil-right');
+        // Göz merkezleri (SVG koordinatlarına göre yaklaşık)
+        const eyeLeftCenter = { x: 35, y: 40 };
+        const eyeRightCenter = { x: 65, y: 40 };
+        const maxMove = 3; // Göz bebeğinin hareket yarıçapı
+
+        function moveEyes(e) {
+            const frogRect = document.getElementById('frogSvgMain').getBoundingClientRect();
+            // Mouse'un SVG içindeki göreceli konumu
+            const mouseX = e.clientX - frogRect.left;
+            const mouseY = e.clientY - frogRect.top;
+
+            // Sol Göz Hesabı
+            let dxL = mouseX - eyeLeftCenter.x;
+            let dyL = mouseY - eyeLeftCenter.y;
+            let distL = Math.sqrt(dxL*dxL + dyL*dyL);
+            let moveL = Math.min(distL, maxMove); // Maksimum hareket sınırı
+            let angleL = Math.atan2(dyL, dxL);
+            let xL = Math.cos(angleL) * moveL;
+            let yL = Math.sin(angleL) * moveL;
+
+            // Sağ Göz Hesabı
+            let dxR = mouseX - eyeRightCenter.x;
+            let dyR = mouseY - eyeRightCenter.y;
+            let distR = Math.sqrt(dxR*dxR + dyR*dyR);
+            let moveR = Math.min(distR, maxMove);
+            let angleR = Math.atan2(dyR, dxR);
+            let xR = Math.cos(angleR) * moveR;
+            let yR = Math.sin(angleR) * moveR;
+
+            // CSS Transform uygula (SVG koordinat sistemine göre)
+            pupilLeft.setAttribute('transform', `translate(${xL}, ${yL})`);
+            pupilRight.setAttribute('transform', `translate(${xR}, ${yR})`);
+        }
+
+        document.addEventListener('mousemove', moveEyes);
+        document.addEventListener('touchmove', (e) => moveEyes(e.touches[0]));
 
 
-        // --- 2. ETKİLEŞİMLER ---
+        // --- 3. SİHİRLİ İMLEÇ İZİ (FAIRY DUST) ---
+        let dustThrottle = false;
+        document.addEventListener('mousemove', (e) => {
+            if(dustThrottle) return;
+            dustThrottle = true;
+            setTimeout(() => dustThrottle = false, 30); // Performans için sınırlama
+
+            const dust = document.createElement('div');
+            dust.classList.add('fairy-dust');
+            dust.style.left = e.clientX + 'px';
+            dust.style.top = e.clientY + 'px';
+            document.body.appendChild(dust);
+
+            setTimeout(() => {
+                dust.remove();
+            }, 1000);
+        });
+
+        // --- 4. DİĞER FONKSİYONLAR (Ateş Böceği vb.) ---
+        const fireflyContainer = document.getElementById('fireflies-container');
+        for(let i=0; i<15; i++) {
+            let div = document.createElement('div');
+            div.classList.add('firefly');
+            div.style.left = Math.random() * 100 + '%';
+            div.style.top = Math.random() * 100 + '%';
+            div.style.animationDelay = Math.random() * 5 + 's';
+            div.style.setProperty('--moveX', (Math.random()*200 - 100) + 'px');
+            div.style.setProperty('--moveY', (Math.random()*200 - 100) + 'px');
+            fireflyContainer.appendChild(div);
+        }
+
+        // --- 5. UI ETKİLEŞİMLERİ ---
         const frogTrigger = document.getElementById('frogTrigger');
         const modalWrapper = document.getElementById('modalWrapper');
         const closeModal = document.getElementById('closeModal');
         const instruction = document.getElementById('instruction');
 
-        // Formu aç
+        // İlk etkileşimde müziği başlat
+        document.body.addEventListener('click', function startAudio() {
+            if(!isMuted) bgMusic.play().catch(()=>{});
+            document.body.removeEventListener('click', startAudio);
+        }, {once:true});
+
         frogTrigger.addEventListener('click', () => {
+            playSound(clickSound);
+            triggerHaptic();
             modalWrapper.classList.add('active');
             frogTrigger.classList.add('hidden');
-            instruction.style.opacity = '0';
+            instruction.classList.add('hidden');
         });
 
-        // Formu kapat (X tuşu)
         closeModal.addEventListener('click', () => {
             modalWrapper.classList.remove('active');
             frogTrigger.classList.remove('hidden');
-            instruction.style.opacity = '1';
+            instruction.classList.remove('hidden');
         });
 
-        // --- 3. FORM GÖNDERİMİ (GÜVENLİ YÖNTEM) ---
+        // --- 6. FORM LOGIC ---
         const form = document.getElementById('swampForm');
         const submitBtn = document.getElementById('submitBtn');
         const animScene = document.getElementById('animScene');
@@ -309,60 +559,34 @@
         const pandaTarget = document.getElementById('pandaTarget');
 
         form.addEventListener('submit', async function(e) {
-            e.preventDefault(); // Sayfa yenilenmesini engelle
-            
+            e.preventDefault();
             submitBtn.disabled = true;
-            submitBtn.innerText = "İletiliyor...";
-
-            // FormData: Formdaki tüm name='...' alanlarını otomatik paketler.
-            // "message" alanı textarea olduğu için ve name="message" olduğu için kesin gider.
+            submitBtn.innerText = "Sihirli Mühür Basılıyor...";
+            
             const data = new FormData(form);
-
             try {
                 const response = await fetch(form.action, {
-                    method: form.method,
-                    body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    method: form.method, body: data, headers: { 'Accept': 'application/json' }
                 });
-
                 if (response.ok) {
-                    // --- BAŞARILI ---
-                    // 1. Modalı gizle
                     modalWrapper.classList.remove('active');
-                    
-                    // 2. Animasyon Sahnesini Aç
                     animScene.classList.add('playing');
-
-                    // 3. Mektubu fırlat (0.5sn bekle)
+                    setTimeout(() => { flyMsg.classList.add('fly-animation'); }, 200);
                     setTimeout(() => {
-                        flyMsg.classList.add('fly-active');
-                    }, 300);
-
-                    // 4. Panda yakalasın (2sn sonra)
-                    setTimeout(() => {
-                        pandaTarget.style.transform = "scale(1.2) rotate(10deg)"; // Panda zıplasın
-                        successTxt.classList.add('visible');
-                    }, 2300);
-
-                    // 5. Her şeyi sıfırla (5sn sonra)
-                    setTimeout(() => {
-                        location.reload(); // Temiz sayfa
-                    }, 5000);
-
-                } else {
-                    alert("Formspree hatası! Lütfen tekrar dene.");
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = "Vırak (Gönder)";
-                }
+                        playSound(successSound); // Başarı sesi
+                        triggerHaptic(); // Başarı titreşimi
+                        pandaTarget.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                        pandaTarget.style.transform = "scale(1.3) rotate(15deg)";
+                        successTxt.classList.add('show');
+                    }, 2200);
+                    setTimeout(() => { window.location.reload(); }, 5500);
+                } else { throw new Error("Form Hatası"); }
             } catch (error) {
-                alert("Bağlantı sorunu var patron.");
+                alert("Bir aksilik oldu Patron, tekrar dene.");
                 submitBtn.disabled = false;
-                submitBtn.innerText = "Vırak (Gönder)";
+                submitBtn.innerText = "Mektubu Mühürle & Gönder";
             }
         });
-
     </script>
 </body>
 </html>
