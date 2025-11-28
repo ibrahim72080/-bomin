@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurbağa Hattı | Ultimate</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <title>Kurbağa Hattı & Mina </title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -15,6 +15,7 @@
             --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
             --text-color: #ecfdf5;
+            --neon-pink: #ff00de; /* Mina efekti için */
         }
 
         body {
@@ -29,10 +30,92 @@
             justify-content: center;
             color: var(--text-color);
             position: relative;
-            cursor: crosshair; /* Sihirli his için imleç */
+            cursor: crosshair;
         }
 
-        /* --- SİHİRLİ İMLEÇ İZİ (FAIRY DUST) --- */
+        /* ----------------------------------------------------- */
+        /* --- MINA YAĞMUR EFEKTİ CSS (Entegre Edildi) --- */
+        /* ----------------------------------------------------- */
+        
+        #mina-rain-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* Tıklamalar arkaya geçsin diye */
+            z-index: 5; /* Sis ve Arka planın üstünde, Kurbağanın altında */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .cloud-wrapper {
+            position: absolute;
+            top: 5%; /* Sayfanın tepesinde */
+            width: 300px;
+            height: 100px;
+            animation: floatCloud 5s ease-in-out infinite;
+        }
+
+        .cloud {
+            position: absolute;
+            background: #eef2f3;
+            border-radius: 100px;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+        }
+        .cloud.base { width: 300px; height: 100px; top: 0; left: 0; z-index: 2; opacity: 0.8; }
+        .cloud.front { width: 140px; height: 140px; top: -60px; left: 40px; border-radius: 50%; z-index: 3; background: #fff; }
+        .cloud.back { width: 100px; height: 100px; top: -40px; right: 50px; border-radius: 50%; z-index: 1; opacity: 0.6; }
+
+        @keyframes floatCloud {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .target-text {
+            position: absolute;
+            top: 22%; /* Bulutun hemen altı */
+            font-family: 'Montserrat', sans-serif; /* Kalın font */
+            font-size: 5rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.03); /* Çok silik */
+            letter-spacing: 15px;
+            transition: color 0.05s, text-shadow 0.05s;
+            z-index: 6;
+        }
+
+        /* Parlama Efekti */
+        .target-text.active-glow {
+            color: #fff;
+            text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink), 0 0 80px var(--neon-pink);
+            transform: scale(1.02);
+        }
+
+        .rain-drop {
+            position: absolute;
+            width: 2px; height: 20px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.8));
+            border-radius: 2px;
+            opacity: 0.6;
+        }
+
+        .splash {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--neon-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-pink);
+            animation: splashAnim 0.5s ease-out forwards;
+            z-index: 7;
+        }
+
+        @keyframes splashAnim {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* ----------------------------------------------------- */
+        /* --- MEVCUT SAYFA CSS'LERİ --- */
+        /* ----------------------------------------------------- */
+
         .fairy-dust {
             position: absolute;
             width: 6px; height: 6px;
@@ -48,7 +131,6 @@
             100% { opacity: 0; transform: scale(2) translateY(-20px); }
         }
 
-        /* --- SES KONTROL BUTONU --- */
         .sound-toggle {
             position: absolute;
             top: 20px; right: 20px;
@@ -66,7 +148,6 @@
         }
         .sound-toggle:hover { background: var(--accent-green); color: #064e3b; }
 
-        /* --- ATMOSFER & SİS --- */
         .firefly {
             position: absolute;
             width: 4px; height: 4px;
@@ -92,16 +173,15 @@
             pointer-events: none;
         }
 
-        /* --- SAHNE --- */
         .stage {
             position: relative;
-            z-index: 10;
+            z-index: 10; /* Yağmurun üstünde */
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-top: 150px; /* Mina yazısıyla çakışmaması için biraz aşağı ittik */
         }
 
-        /* YENİ GELİŞMİŞ YAZI ANİMASYONU */
         .instruction-wrapper {
             position: relative;
             margin-bottom: 40px;
@@ -124,7 +204,6 @@
             50% { transform: translateY(-8px) rotate(1deg); } 
         }
 
-        /* --- KURBAĞA BUTONU --- */
         .frog-wrapper {
             position: relative;
             cursor: pointer;
@@ -158,7 +237,6 @@
 
         .hidden { opacity: 0; pointer-events: none; transform: scale(0) !important; transition: 0.5s; }
 
-        /* --- GLASS MODAL --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -210,7 +288,6 @@
             letter-spacing: 1px;
         }
 
-        /* --- INPUTS --- */
         .input-group { margin-bottom: 25px; position: relative; }
         
         input, textarea {
@@ -254,7 +331,6 @@
         button.send-btn:active { transform: translateY(1px); }
         button.send-btn:disabled { opacity: 0.7; cursor: wait; filter: grayscale(1); }
 
-        /* --- DELIVERY ANIMATION --- */
         .delivery-scene {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -267,12 +343,7 @@
         }
         .delivery-scene.playing { display: flex; }
 
-        .actors-container {
-            position: relative;
-            width: 300px;
-            height: 200px;
-        }
-
+        .actors-container { position: relative; width: 300px; height: 200px; }
         .actor-svg { position: absolute; width: 80px; height: auto; bottom: 0; }
         .frog-actor { left: 0; }
         .panda-actor { right: 0; transform-origin: bottom center; }
@@ -325,12 +396,20 @@
         <i class="fas fa-volume-mute"></i>
     </div>
 
+    <div id="mina-rain-layer">
+        <div class="cloud-wrapper">
+            <div class="cloud base"></div>
+            <div class="cloud front"></div>
+            <div class="cloud back"></div>
+        </div>
+        <div class="target-text" id="minaText">MINA</div>
+    </div>
     <div id="fireflies-container"></div>
     <div class="fog"></div>
 
     <div class="stage" id="mainStage">
         <div class="instruction-wrapper" id="instruction">
-            <div class="instruction">İleti için dokun bana.<br> Denemelisin  </div>
+            <div class="instruction">İleti için dokun bana.<br> Denemelisin</div>
         </div>
         
         <div class="frog-wrapper" id="frogTrigger">
@@ -392,23 +471,99 @@
         <div class="success-text" id="successTxt">Teslim Edildi! 🐼✨</div>
     </div>
 
-    <script>
-    // --- 1. ZİYARET BİLDİRİMİ ---
-        // Sayfa yüklenince arka planda sessizce bildirim gönderir.
-        // Hata verse bile kullanıcıya yansıtmaz.
-        fetch("https://formspree.io/f/xandnvvv", {
+     <script>
+    // --- 0. MINA YAĞMUR EFEKTİ JS (Entegre Edildi) ---
+    (function() {
+        const container = document.getElementById('mina-rain-layer');
+        const cloud = container.querySelector('.cloud-wrapper');
+        const text = document.getElementById('minaText');
+        
+        const rainSpeed = 15;
+        const rainFrequency = 30;
+
+        function spawnRain() {
+            const drop = document.createElement('div');
+            drop.classList.add('rain-drop');
+            const cloudRect = cloud.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+
+            const startX = cloudRect.left - containerRect.left + (Math.random() * cloudRect.width);
+            const startY = cloudRect.bottom - containerRect.top - 20;
+
+            drop.style.left = startX + 'px';
+            drop.style.top = startY + 'px';
+            drop.dataset.y = startY;
+            drop.dataset.speed = Math.random() * 5 + rainSpeed;
+
+            container.appendChild(drop);
+            setTimeout(spawnRain, Math.random() * rainFrequency + 20);
+        }
+
+        function updateLoop() {
+            const drops = document.querySelectorAll('.rain-drop');
+            const textRect = text.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            const textTop = textRect.top - containerRect.top;
+            const textLeft = textRect.left - containerRect.left;
+            const textRight = textRect.right - containerRect.left;
+
+            drops.forEach(drop => {
+                let currentY = parseFloat(drop.dataset.y);
+                const speed = parseFloat(drop.dataset.speed);
+                currentY += speed;
+                drop.style.transform = `translateY(${currentY - parseFloat(drop.style.top)}px)`;
+                drop.dataset.y = currentY;
+                const dropX = parseFloat(drop.style.left);
+
+                if (currentY >= textTop + 5 && currentY <= textTop + 35) {
+                    if (dropX >= textLeft && dropX <= textRight) {
+                        triggerHitEffect(dropX, currentY);
+                        drop.remove();
+                        return;
+                    }
+                }
+                if (currentY > container.offsetHeight) drop.remove();
+            });
+            requestAnimationFrame(updateLoop);
+        }
+
+        function triggerHitEffect(x, y) {
+            text.classList.add('active-glow');
+            if (text.glowTimeout) clearTimeout(text.glowTimeout);
+            text.glowTimeout = setTimeout(() => { text.classList.remove('active-glow'); }, 100);
+            createSplash(x, y);
+        }
+
+        function createSplash(x, y) {
+            const particleCount = Math.floor(Math.random() * 3) + 4;
+            for(let i=0; i < particleCount; i++) {
+                const splash = document.createElement('div');
+                splash.classList.add('splash');
+                splash.style.left = x + 'px';
+                splash.style.top = y + 'px';
+                const tx = (Math.random() - 0.5) * 60; 
+                const ty = (Math.random() - 1) * 60;   
+                splash.style.setProperty('--tx', `${tx}px`);
+                splash.style.setProperty('--ty', `${ty}px`);
+                container.appendChild(splash);
+                setTimeout(() => splash.remove(), 500);
+            }
+        }
+        spawnRain();
+        requestAnimationFrame(updateLoop);
+    })();
+
+    // --- 1. MEVCUT SİTE SCRIPT ---
+    
+    fetch("https://formspree.io/f/xandnvvv", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 _subject: "Biri Sayfaya Girdi (Ziyaret)",
                 info: "Sayfa şu an görüntülendi."
             })
-        }).catch(() => {}); // Hata olursa yoksay
-        
-    
-    
-    
-        // --- 1. SES & HAPTIC MOTORU ---
+        }).catch(() => {});
+
         let isMuted = localStorage.getItem('frogMute') === 'true';
         const bgMusic = document.getElementById('bgMusic');
         const clickSound = document.getElementById('clickSound');
@@ -416,7 +571,7 @@
         const soundToggle = document.getElementById('soundToggle');
         const soundIcon = soundToggle.querySelector('i');
 
-        bgMusic.volume = 0.3; // Ambiyans sesi kısık başlasın
+        bgMusic.volume = 0.3;
 
         function updateSoundIcon() {
             if (isMuted) {
@@ -426,8 +581,6 @@
             } else {
                 soundIcon.classList.remove('fa-volume-mute');
                 soundIcon.classList.add('fa-volume-up');
-                // Tarayıcı politikası gereği, müzik sadece kullanıcı etkileşimi sonrası başlayabilir.
-                // İlk tıklamada başlayacak şekilde aşağıda ayarladık.
             }
         }
         updateSoundIcon();
@@ -436,7 +589,7 @@
             isMuted = !isMuted;
             localStorage.setItem('frogMute', isMuted);
             updateSoundIcon();
-            if(!isMuted) bgMusic.play().catch(()=>{}); // Hata verirse (henüz etkileşim yoksa) yoksay
+            if(!isMuted) bgMusic.play().catch(()=>{});
         });
 
         function playSound(sound) {
@@ -448,34 +601,29 @@
 
         function triggerHaptic() {
             if (navigator.vibrate) {
-                navigator.vibrate(50); // 50ms hafif titreşim
+                navigator.vibrate(50);
             }
         }
 
-        // --- 2. GÖZ TAKİBİ (EYE TRACKING) ---
         const pupilLeft = document.querySelector('.pupil-left');
         const pupilRight = document.querySelector('.pupil-right');
-        // Göz merkezleri (SVG koordinatlarına göre yaklaşık)
         const eyeLeftCenter = { x: 35, y: 40 };
         const eyeRightCenter = { x: 65, y: 40 };
-        const maxMove = 3; // Göz bebeğinin hareket yarıçapı
+        const maxMove = 3;
 
         function moveEyes(e) {
             const frogRect = document.getElementById('frogSvgMain').getBoundingClientRect();
-            // Mouse'un SVG içindeki göreceli konumu
             const mouseX = e.clientX - frogRect.left;
             const mouseY = e.clientY - frogRect.top;
 
-            // Sol Göz Hesabı
             let dxL = mouseX - eyeLeftCenter.x;
             let dyL = mouseY - eyeLeftCenter.y;
             let distL = Math.sqrt(dxL*dxL + dyL*dyL);
-            let moveL = Math.min(distL, maxMove); // Maksimum hareket sınırı
+            let moveL = Math.min(distL, maxMove);
             let angleL = Math.atan2(dyL, dxL);
             let xL = Math.cos(angleL) * moveL;
             let yL = Math.sin(angleL) * moveL;
 
-            // Sağ Göz Hesabı
             let dxR = mouseX - eyeRightCenter.x;
             let dyR = mouseY - eyeRightCenter.y;
             let distR = Math.sqrt(dxR*dxR + dyR*dyR);
@@ -484,7 +632,6 @@
             let xR = Math.cos(angleR) * moveR;
             let yR = Math.sin(angleR) * moveR;
 
-            // CSS Transform uygula (SVG koordinat sistemine göre)
             pupilLeft.setAttribute('transform', `translate(${xL}, ${yL})`);
             pupilRight.setAttribute('transform', `translate(${xR}, ${yR})`);
         }
@@ -492,13 +639,11 @@
         document.addEventListener('mousemove', moveEyes);
         document.addEventListener('touchmove', (e) => moveEyes(e.touches[0]));
 
-
-        // --- 3. SİHİRLİ İMLEÇ İZİ (FAIRY DUST) ---
         let dustThrottle = false;
         document.addEventListener('mousemove', (e) => {
             if(dustThrottle) return;
             dustThrottle = true;
-            setTimeout(() => dustThrottle = false, 30); // Performans için sınırlama
+            setTimeout(() => dustThrottle = false, 30);
 
             const dust = document.createElement('div');
             dust.classList.add('fairy-dust');
@@ -511,7 +656,6 @@
             }, 1000);
         });
 
-        // --- 4. DİĞER FONKSİYONLAR (Ateş Böceği vb.) ---
         const fireflyContainer = document.getElementById('fireflies-container');
         for(let i=0; i<15; i++) {
             let div = document.createElement('div');
@@ -524,13 +668,11 @@
             fireflyContainer.appendChild(div);
         }
 
-        // --- 5. UI ETKİLEŞİMLERİ ---
         const frogTrigger = document.getElementById('frogTrigger');
         const modalWrapper = document.getElementById('modalWrapper');
         const closeModal = document.getElementById('closeModal');
         const instruction = document.getElementById('instruction');
 
-        // İlk etkileşimde müziği başlat
         document.body.addEventListener('click', function startAudio() {
             if(!isMuted) bgMusic.play().catch(()=>{});
             document.body.removeEventListener('click', startAudio);
@@ -550,7 +692,6 @@
             instruction.classList.remove('hidden');
         });
 
-        // --- 6. FORM LOGIC ---
         const form = document.getElementById('swampForm');
         const submitBtn = document.getElementById('submitBtn');
         const animScene = document.getElementById('animScene');
@@ -573,8 +714,8 @@
                     animScene.classList.add('playing');
                     setTimeout(() => { flyMsg.classList.add('fly-animation'); }, 200);
                     setTimeout(() => {
-                        playSound(successSound); // Başarı sesi
-                        triggerHaptic(); // Başarı titreşimi
+                        playSound(successSound);
+                        triggerHaptic();
                         pandaTarget.style.transition = "0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
                         pandaTarget.style.transform = "scale(1.3) rotate(15deg)";
                         successTxt.classList.add('show');
@@ -590,4 +731,3 @@
     </script>
 </body>
 </html>
-
