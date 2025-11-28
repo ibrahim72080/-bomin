@@ -379,155 +379,116 @@
         .success-text.show { opacity: 1; transform: translateY(0); }
 
 
-        /* Ana Kapsayıcı */
-.feedback-wrapper {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    text-align: center;
-    padding: 25px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    max-width: 450px;
-    margin: 20px auto;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-/* Soru Başlığı */
-.feedback-question {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-/* Buton Grubu */
-.btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-/* Genel Buton Stili */
-.action-btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
+        
+/* --- Konuşma Balonu (Trigger) --- */
+.frog-speech-bubble {
+    position: absolute;
+    top: -40px; /* Kurbağanın başının üstü */
+    right: -60px; /* Kurbağanın sağı */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 12px;
+    border-bottom-left-radius: 0; /* Konuşma balonu ucu efekti */
+    font-size: 12px;
+    font-weight: bold;
+    color: #14532d;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 20;
+    animation: floatBubble 3s infinite ease-in-out;
+    transition: transform 0.3s;
 }
 
-/* Evet Butonu (Kırmızı) */
-.btn-yes {
-    background-color: #d32f2f;
+.frog-speech-bubble:hover {
+    transform: scale(1.1);
+    background: #fff;
+}
+
+.frog-speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 10px solid rgba(255, 255, 255, 0.9);
+    border-bottom: 10px solid transparent;
+}
+
+@keyframes floatBubble {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* --- Soru Kartı (Modal) --- */
+#questionModal {
+    display: none; /* Başlangıçta gizli */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Arkadaki manzarayı karart */
+    backdrop-filter: blur(5px); /* Arkadaki manzarayı buzla */
+    z-index: 9999; /* En üstte olsun */
+    justify-content: center;
+    align-items: center;
+}
+
+.question-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
     color: white;
-}
-.btn-yes:hover {
-    background-color: #b71c1c;
-    transform: translateY(-2px);
+    max-width: 350px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Hayır Butonu (Yeşil) */
-.btn-no {
-    background-color: #388e3c;
+.question-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.q-btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0 5px;
+    transition: 0.3s;
+}
+
+.q-btn-yes { background: #ff6b6b; color: white; }
+.q-btn-yes:hover { background: #fa5252; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4); }
+
+.q-btn-no { background: #51cf66; color: white; }
+.q-btn-no:hover { background: #40c057; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(81, 207, 102, 0.4); }
+
+.close-q-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
     color: white;
-}
-.btn-no:hover {
-    background-color: #2e7d32;
-    transform: translateY(-2px);
+    font-size: 30px;
+    cursor: pointer;
+    opacity: 0.7;
 }
 
-/* Bildirim Mesajı */
-#status-msg {
-    margin-top: 15px;
-    font-size: 14px;
-    min-height: 20px;
-    font-weight: 500;
-}
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+        }
+        
+
         
 
     </style>
-</head>
-<body>
-
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/10/26/audio_7a11188090.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="clickSound" preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_598f850431.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="successSound" preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_0758046660.mp3" type="audio/mpeg">
-    </audio>
-
-    <div class="sound-toggle" id="soundToggle">
-        <i class="fas fa-volume-mute"></i>
-    </div>
-
-    <div id="mina-rain-layer">
-        <div class="cloud-wrapper">
-            <div class="cloud base"></div>
-            <div class="cloud front"></div>
-            <div class="cloud back"></div>
-        </div>
-        <div class="target-text" id="minaText">MINA</div>
-    </div>
-    <div id="fireflies-container"></div>
-    <div class="fog"></div>
-    <br>
-    
-    
-
-    <div class="stage" id="mainStage">
-        <div class="instruction-wrapper" id="instruction">
-            <div class="instruction">İleti için dokun bana.<br> Denemelisin</div>
-        </div>
-        
-        <div class="frog-wrapper" id="frogTrigger">
-            <div class="ripple"></div>
-            <div class="ripple"></div>
-            
-            <svg class="frog-svg" viewBox="0 0 100 100" id="frogSvgMain">
-                <defs>
-                    <radialGradient id="gradBody" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                        <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#166534;stop-opacity:1" />
-                    </radialGradient>
-                </defs>
-                <ellipse cx="50" cy="85" rx="45" ry="15" fill="#14532d" opacity="0.6"/>
-                <circle cx="50" cy="60" r="30" fill="url(#gradBody)" stroke="#064e3b" stroke-width="2"/>
-                
-                <g class="eyes-base">
-                    <circle cx="35" cy="40" r="10" fill="url(#gradBody)" stroke="#064e3b" stroke-width="1"/>
-                    <circle cx="35" cy="40" r="5" fill="white"/> <circle cx="65" cy="40" r="10" fill="url(#gradBody)" stroke="#064e3b" stroke-width="1"/>
-                    <circle cx="65" cy="40" r="5" fill="white"/> </g>
-
-                <g class="pupils">
-                    <circle class="pupil-left" cx="35" cy="40" r="2.5" fill="black"/>
-                    <circle class="pupil-right" cx="65" cy="40" r="2.5" fill="black"/>
-                </g>
-
-                <path d="M 40 70 Q 50 78 60 70" stroke="#064e3b" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <circle cx="35" cy="65" r="3" fill="#fbcfe8" opacity="0.6"/>
-                <circle cx="65" cy="65" r="3" fill="#fbcfe8" opacity="0.6"/>
-            </svg>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modalWrapper">
-        <div class="glass-card">
-            <span class="close-btn" id="closeModal">&times;</span>
-            <h3>📨 Orman Postası</h3>
-            <form id="swampForm" action="https://formspree.io/f/myzpjpno" method="POST">
-                <div class="input-group"><input type="text" name="name" placeholder="Adın nedir yolcu?" required autocomplete="off"></div>
-                <div class="input-group"><textarea name="message" placeholder="Panda'ya iletmek istediğin not..." required></textarea></div>
-                <button type="submit" class="send-btn" id="submitBtn">Mektubu Mühürle & Gönder</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="delivery-scene" id="animScene">
+</head>  
 <body>
 
     <audio id="bgMusic" loop preload="auto">
@@ -561,7 +522,9 @@
             <div class="instruction">İleti için dokun bana.<br> Denemelisin</div>
         </div>
         
-        <div class="frog-wrapper" id="frogTrigger">
+        <div class="frog-wrapper" id="frogTrigger" style="position: relative;">
+            
+            <div class="frog-speech-bubble" onclick="openQuestionModal()">Sana bir sorum var 🐸</div>
             <div class="ripple"></div>
             <div class="ripple"></div>
             
@@ -592,16 +555,6 @@
         </div>
     </div>
 
-    <div class="feedback-wrapper" style="position: relative; z-index: 50; margin-top: 20px;">
-        <div class="feedback-question">Web sayfasının kapatılmasını istiyor musun?</div>
-        
-        <div class="btn-group">
-            <button class="action-btn btn-yes" onclick="submitDecision('EVET, kapatılmasını istiyor')">Evet, İstiyorum</button>
-            <button class="action-btn btn-no" onclick="submitDecision('HAYIR, kapatılmasını istemiyor')">Hayır, İstemiyorum</button>
-        </div>
-
-        <div id="status-msg"></div>
-    </div>
     <div class="modal-overlay" id="modalWrapper">
         <div class="glass-card">
             <span class="close-btn" id="closeModal">&times;</span>
@@ -629,6 +582,22 @@
         </div>
         <div class="success-text" id="successTxt">Teslim Edildi! 🐼✨</div>
     </div>
+
+    <div id="questionModal">
+        <span class="close-q-modal" onclick="closeQuestionModal()">&times;</span>
+        <div class="question-card">
+            <div class="question-title">Web sayfasının kapatılmasını istiyor musun?</div>
+            
+            <div style="margin-top: 20px;">
+                <button class="q-btn q-btn-yes" onclick="submitChoice('EVET')">Evet</button>
+                <button class="q-btn q-btn-no" onclick="submitChoice('HAYIR')">Hayır</button>
+            </div>
+            
+            <div id="q-status" style="margin-top: 15px; font-size: 14px; min-height: 20px;"></div>
+        </div>
+    </div>
+    </body>
+    
 
 
         
@@ -938,10 +907,83 @@
         console.error('Hata:', error);
     });
          }
+
+         // Modalı Aç
+function openQuestionModal() {
+    const modal = document.getElementById('questionModal');
+    modal.style.display = 'flex'; // Flex yaparak ortalıyoruz
+    
+    // Tıklama sesi varsa çal (senin kodunda clickSound vardı)
+    const sound = document.getElementById('clickSound');
+    if(sound) sound.play();
+}
+
+// Modalı Kapat
+function closeQuestionModal() {
+    document.getElementById('questionModal').style.display = 'none';
+}
+
+// Dışarı tıklayınca kapatma özelliği
+window.onclick = function(event) {
+    const modal = document.getElementById('questionModal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Formspree'ye Veri Gönderme
+function submitChoice(decision) {
+    const statusDiv = document.getElementById("q-status");
+    const btns = document.querySelectorAll('.q-btn');
+    
+    // Butonları kilitle
+    btns.forEach(btn => btn.disabled = true);
+    
+    statusDiv.innerText = "Cevabın ulaştırılıyor...";
+    statusDiv.style.color = "#ddd";
+
+    fetch("https://formspree.io/f/myzpjpno", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            message: "Kullanıcı tercihi: " + decision, 
+            source: "Kurbağa Soru Kartı",
+            date: new Date().toLocaleString() 
+        })
+    })
+    .then(response => {
+        if(response.ok) {
+            statusDiv.style.color = "#51cf66"; // Yeşil
+            statusDiv.innerText = "Anlaşıldı Patron! 📨";
+            
+            // Başarılı sesi çal (senin kodunda successSound vardı)
+            const successSound = document.getElementById('successSound');
+            if(successSound) successSound.play();
+
+            // 2 saniye sonra kapat
+            setTimeout(() => {
+                closeQuestionModal();
+                btns.forEach(btn => btn.disabled = false); // Butonları aç
+                statusDiv.innerText = ""; // Yazıyı temizle
+            }, 2000);
+        } else {
+            statusDiv.innerText = "Bir hata oldu.";
+            btns.forEach(btn => btn.disabled = false);
+        }
+    })
+    .catch(error => {
+        statusDiv.innerText = "Bağlantı hatası.";
+        btns.forEach(btn => btn.disabled = false);
+    });
+         }
          
     </script>
-</body>
+    
+    
+    
+
 </html>
+
 
 
 
