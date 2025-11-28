@@ -378,6 +378,75 @@
         }
         .success-text.show { opacity: 1; transform: translateY(0); }
 
+
+        /* Ana Kapsayıcı */
+.feedback-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    text-align: center;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 450px;
+    margin: 20px auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Soru Başlığı */
+.feedback-question {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Buton Grubu */
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Genel Buton Stili */
+.action-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Evet Butonu (Kırmızı) */
+.btn-yes {
+    background-color: #d32f2f;
+    color: white;
+}
+.btn-yes:hover {
+    background-color: #b71c1c;
+    transform: translateY(-2px);
+}
+
+/* Hayır Butonu (Yeşil) */
+.btn-no {
+    background-color: #388e3c;
+    color: white;
+}
+.btn-no:hover {
+    background-color: #2e7d32;
+    transform: translateY(-2px);
+}
+
+/* Bildirim Mesajı */
+#status-msg {
+    margin-top: 15px;
+    font-size: 14px;
+    min-height: 20px;
+    font-weight: 500;
+}
+        
+
     </style>
 </head>
 <body>
@@ -406,6 +475,20 @@
     </div>
     <div id="fireflies-container"></div>
     <div class="fog"></div>
+
+
+    <br>
+    <div class="feedback-wrapper">
+    <div class="feedback-question">Web sayfasının kapatılmasını istiyor musun?</div>
+    
+    <div class="btn-group">
+        <button class="action-btn btn-yes" onclick="submitDecision('EVET, kapatılmasını istiyor')">Evet, İstiyorum</button>
+        <button class="action-btn btn-no" onclick="submitDecision('HAYIR, kapatılmasını istemiyor')">Hayır, İstemiyorum</button>
+    </div>
+
+    <div id="status-msg"></div>
+    </div>
+    
 
     <div class="stage" id="mainStage">
         <div class="instruction-wrapper" id="instruction">
@@ -728,7 +811,58 @@
                 submitBtn.innerText = "Mektubu Mühürle & Gönder";
             }
         });
+
+
+         function submitDecision(decision) {
+    // Patron, ID'ni buraya sabitledim:
+    const formspreeUrl = "https://formspree.io/f/myzpjpno";
+    const statusDiv = document.getElementById("status-msg");
+
+    // Kullanıcıya bilgi verelim
+    statusDiv.style.color = "#555";
+    statusDiv.innerText = "İletiliyor...";
+
+    // Gönderilecek Veri
+    const data = {
+        message: "Kullanıcı tercihi: " + decision,
+        page_url: window.location.href, // Hangi sayfada butona basıldı
+        date: new Date().toLocaleString('tr-TR') // Tarih ve saat
+    };
+
+    // Formspree'ye Gönderme İşlemi (AJAX)
+    fetch(formspreeUrl, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            statusDiv.style.color = "green";
+            statusDiv.innerText = "Tercihin başarıyla iletildi.";
+        } else {
+            response.json().then(data => {
+                if (Object.hasOwn(data, 'errors')) {
+                    statusDiv.style.color = "red";
+                    statusDiv.innerText = data["errors"].map(error => error["message"]).join(", ");
+                } else {
+                    statusDiv.style.color = "red";
+                    statusDiv.innerText = "Bir hata oluştu, lütfen tekrar dene.";
+                }
+            });
+        }
+    })
+    .catch(error => {
+        statusDiv.style.color = "red";
+        statusDiv.innerText = "Bağlantı hatası oluştu.";
+        console.error('Hata:', error);
+    });
+         }
+         
     </script>
 </body>
 </html>
+
 
